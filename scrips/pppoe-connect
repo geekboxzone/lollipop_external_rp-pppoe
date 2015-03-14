@@ -1,4 +1,4 @@
-#!/system/bin/busybox sh
+#!/system/bin/busybox1.11 sh
 # ../scripts/pppoe-connect.  Generated from pppoe-connect.in by configure.
 #***********************************************************************
 #
@@ -45,7 +45,7 @@ export LANG
 #    exit 1
 #fi
 
-#if test "busybox setsid" != "" -a ! -x "busybox setsid"; then
+#if test "busybox1.11 setsid" != "" -a ! -x "busybox1.11 setsid"; then
 #    SETSID=""
 #fi
 
@@ -115,8 +115,8 @@ fi
 # MTU of Ethernet card attached to modem MUST be 1500.  This apparently
 # fails on some *BSD's, so we'll only do it under Linux
 
-if test `busybox uname -s` = Linux ; then
-    busybox ifconfig $ETH up mtu 1500
+if test `busybox1.11 uname -s` = Linux ; then
+    busybox1.11 ifconfig $ETH up mtu 1500
     # For 2.4 kernels.  Will fail on 2.2.x, but who cares?
     modprobe ppp_generic > /dev/null 2>&1
     modprobe ppp_async > /dev/null 2>&1
@@ -131,7 +131,7 @@ if test "$SYNCHRONOUS" = "yes" ; then
     PPPOE_SYNC=-s
     PPPD_SYNC=sync
 	# Increase the chances of it working on Linux...
-    if test `busybox uname -s` = Linux ; then
+    if test `busybox1.11 uname -s` = Linux ; then
 	modprobe n_hdlc > /dev/null 2>&1
     fi
 else
@@ -217,11 +217,11 @@ PPP_STD_OPTIONS="$PLUGIN_OPTS noipdefault noauth default-asyncmap $DEFAULTROUTE 
 # Jigger DNS if required...
 if test "$DNSTYPE" = "SERVER" ; then
     # Sorry, dude...
-    busybox rm -f /etc/resolv.conf
+    busybox1.11 rm -f /etc/resolv.conf
     ln -s /etc/ppp/resolv.conf /etc/resolv.conf
 elif test "$DNSTYPE" = "SPECIFY" ; then
     # Sorry, dude...
-    busybox rm -f /etc/resolv.conf
+    busybox1.11 rm -f /etc/resolv.conf
     echo "nameserver $DNS1" > /etc/resolv.conf
     if test -n "$DNS2" ; then
 	echo "nameserver $DNS2" >> /etc/resolv.conf
@@ -237,9 +237,9 @@ if test "$DEBUG" != "" ; then
     fi
     echo "* The following section shows the pppd command we will invoke" >> $DEBUG
     echo "pppd invocation" >> $DEBUG
-    echo "busybox setsid $PPPD pty '$PPPOE_CMD' $PPP_STD_OPTIONS $PPPD_SYNC debug" >> $DEBUG
+    echo "busybox1.11 setsid $PPPD pty '$PPPOE_CMD' $PPP_STD_OPTIONS $PPPD_SYNC debug" >> $DEBUG
     echo "---------------------------------------------" >> $DEBUG
-    busybox setsid $PPPD pty "$PPPOE_CMD" \
+    busybox1.11 setsid $PPPD pty "$PPPOE_CMD" \
 	$PPP_STD_OPTIONS \
 	$PPPD_SYNC >> $DEBUG 2>&1
     echo "---------------------------------------------" >> $DEBUG
@@ -268,7 +268,7 @@ if test "$DEBUG" != "" ; then
     echo "* try using pppoe-sniff." >> $DEBUG
     echo "rp-pppoe debugging dump" >> $DEBUG
     cat $DEBUG-0 >> $DEBUG
-    busybox rm -f $DEBUG-0
+    busybox1.11 rm -f $DEBUG-0
     for i in 1 2 3 4 5 6 7 8 9 10 ; do
 	$ECHO ""
 	$ECHO ""
@@ -289,13 +289,13 @@ echo $$ > $PIDFILE
 
 while [ true ] ; do
     if test "$OVERRIDE_PPPD_COMMAND" != "" ; then
-	busybox setsid $OVERRIDE_PPPD_COMMAND &
+	busybox1.11 setsid $OVERRIDE_PPPD_COMMAND &
 	echo "$!" > $PPPD_PIDFILE
     elif test "$LINUX_PLUGIN" != "" ; then
-	busybox setsid $PPPD $PPP_STD_OPTIONS $DEMAND &
+	busybox1.11 setsid $PPPD $PPP_STD_OPTIONS $DEMAND &
 	echo "$!" > $PPPD_PIDFILE
     else
-	busybox setsid $PPPD pty "$PPPOE_CMD" \
+	busybox1.11 setsid $PPPD pty "$PPPOE_CMD" \
 	    $PPP_STD_OPTIONS \
 	    $DEMAND \
 	    $PPPD_SYNC &

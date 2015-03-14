@@ -1,4 +1,4 @@
-#!/system/bin/busybox sh
+#!/system/bin/busybox1.11 sh
 
 
 # Paths to programs
@@ -27,7 +27,7 @@ $ECHO "-------------------PPPOE--------------------"
 umask 077
 
 copy() {
-    busybox cp $1 $2
+    busybox1.11 cp $1 $2
     if [ "$?" != 0 ] ; then
         $ECHO "*** Error copying $1 to $2"     
         $ECHO "*** Quitting."    
@@ -115,7 +115,7 @@ else
 fi
 
 # Some #$(*& ISP's use a slash in the user name...
-busybox sed -e "s&^USER=.*&USER='$USER'&" \
+busybox1.11 sed -e "s&^USER=.*&USER='$USER'&" \
     -e "s&^ETH=.*&ETH='$ETH'&" \
     -e "s&^PIDFILE=.*&PIDFILE=\"$VARRUN/\$CF_BASE-pppoe.pid\"&" \
     -e "s/^FIREWALL=.*/FIREWALL=$FIREWALL/" \
@@ -138,7 +138,7 @@ if [ "$DNS1" != "" ] ; then
 	$ECHO "Adjusting $RESOLV"     
 	if [ -r $RESOLV ] ; then
 	    $ECHO "  (First backing it up to $RESOLV-bak)"     
-	    busybox cp $RESOLV $RESOLV-bak
+	    busybox1.11 cp $RESOLV $RESOLV-bak
 	    rm $RESOLV
 	fi
 	echo "nameserver $DNS1" >> $RESOLV
@@ -154,18 +154,18 @@ if [ -r $PPP_DIR/pap-secrets ] ; then
     $ECHO "  (But first backing it up to $PPP_DIR/pap-secrets-bak)"     
     copy $PPP_DIR/pap-secrets $PPP_DIR/pap-secrets-bak
 else
-    busybox cp /dev/null $PPP_DIR/pap-secrets-bak
+    busybox1.11 cp /dev/null $PPP_DIR/pap-secrets-bak
 fi
 if [ -r $PPP_DIR/chap-secrets ] ; then
     $ECHO "  (But first backing it up to $PPP_DIR/chap-secrets-bak)"     
     copy $PPP_DIR/chap-secrets $PPP_DIR/chap-secrets-bak
 else
-    busybox cp /dev/null $PPP_DIR/chap-secrets-bak
+    busybox1.11 cp /dev/null $PPP_DIR/chap-secrets-bak
 fi
 
-busybox egrep -v "^$USER|^\"$USER\"" $PPP_DIR/pap-secrets-bak > $PPP_DIR/pap-secrets
+busybox1.11 egrep -v "^$USER|^\"$USER\"" $PPP_DIR/pap-secrets-bak > $PPP_DIR/pap-secrets
 echo "\"$USER\"	*	\"$PWD\"" >> $PPP_DIR/pap-secrets
-busybox egrep -v "^$U|^\"$U\"" $PPP_DIR/chap-secrets-bak > $PPP_DIR/chap-secrets
+busybox1.11egrep -v "^$U|^\"$U\"" $PPP_DIR/chap-secrets-bak > $PPP_DIR/chap-secrets
 echo "\"$USER\"	*	\"$PWD\"" >> $PPP_DIR/chap-secrets
 
 $ECHO "setprop net.pppoe.pppoe-start setuped"     

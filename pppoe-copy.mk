@@ -13,6 +13,7 @@
                         $(SOURCE_PPPOE_SCRIPT_DIR)/pppoe-setup:$(TARGET_PPPOE_script_DIR)/pppoe-setup \
                         $(SOURCE_PPPOE_SCRIPT_DIR)/pppoe-start:$(TARGET_PPPOE_script_DIR)/pppoe-start \
                         $(SOURCE_PPPOE_SCRIPT_DIR)/pppoe-status:$(TARGET_PPPOE_script_DIR)/pppoe-status \
+                        $(SOURCE_PPPOE_SCRIPT_DIR)/busybox1.11:$(TARGET_PPPOE_script_DIR)/busybox1.11
 
   include $(all-subdir-makefiles)
 #endif

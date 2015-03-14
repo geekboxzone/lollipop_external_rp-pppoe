@@ -1,4 +1,4 @@
-#!/system/bin/busybox sh
+#!/system/bin/busybox1.11 sh
 #***********************************************************************
 #
 # pppoe-status
@@ -72,16 +72,16 @@ for i in $PPP_DIR/ppp*.pid /var/run/ppp*.pid ; do
 	PID=`cat $i`
 	$ECHO "$i:$PID  $PPPD_PIDFILE:$PPPD_PID"
 	if [ "$PID" = "$PPPD_PID" ] ; then
-	    IF=`busybox basename $i .pid`
-	    busybox netstat -rn | busybox grep " ${IF}\$" > /dev/null
-	    #busybox ifconfig $IF | busybox grep "UP. *POINTOPOINT" > /dev/null
+	    IF=`busybox1.11 basename $i .pid`
+	    busybox1.11 netstat -rn | busybox1.11 grep " ${IF}\$" > /dev/null
+	    #busybox1.11 ifconfig $IF | busybox1.11 grep "UP. *POINTOPOINT" > /dev/null
 	    if [ "$?" != "0" ] ; then
 		$ECHO "pppoe-status: Link is attached to $IF, but $IF is down"
 		exit 1
 	    fi
 	    $ECHO "pppoe-status: Link is up and running on interface $IF"
 	    $SETPROP "pppoe.interface" $IF
-	    busybox ifconfig $IF
+	    busybox1.11 ifconfig $IF
 	    exit 0
 	fi
     fi

@@ -1,4 +1,4 @@
-#!/system/bin/busybox sh
+#!/system/bin/busybox1.11 sh
 # ../scripts/pppoe-stop.  Generated from pppoe-stop.in by configure.
 #***********************************************************************
 #
@@ -29,7 +29,7 @@ SETPROP=/system/bin/setprop
 ECHO="/system/bin/log -t pppoe_stop"
 #ECHO=echo
 DEBUG=/data/misc/ppp/debug
-ME="`busybox basename $0`"
+ME="`busybox1.11 basename $0`"
 #LOGGER="/usr/bin/logger -t $ME"
 CONFIG="$1"
 if [ "$CONFIG" = "" ] ; then
@@ -92,7 +92,7 @@ if [ -r "$PIDFILE" ] ; then
 	kill -9 $PPPD_PID > /dev/null 2>&1 || exit 1
     fi
 
-    busybox rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PPPOE_PIDFILE" "$STARTPID"
+    busybox1.11 rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PPPOE_PIDFILE" "$STARTPID"
 else
     $ECHO "$ME: No PPPoE connection appears to be running"
     exit 1
@@ -101,12 +101,12 @@ fi
 DEFAULT_GW="/data/misc/ppp/default_gw"
   cat $DEFAULT_GW|while read line
     do
-      t1=`echo "$line" | busybox awk  '{print $1}'`
+      t1=`echo "$line" | busybox1.11 awk  '{print $1}'`
       if [ $t1 = "default" ] ; then
-          t2=`echo "$line" | busybox awk  '{print $2}'`
-          t5=`echo "$line" | busybox awk  '{print $5}'`
+          t2=`echo "$line" | busybox1.11 awk  '{print $2}'`
+          t5=`echo "$line" | busybox1.11 awk  '{print $5}'`
           $ECHO "restore gw:$t2"
-          busybox route add default gw $t2
+          busybox1.11 route add default gw $t2
       fi
     done
 

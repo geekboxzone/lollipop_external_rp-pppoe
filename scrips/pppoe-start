@@ -1,4 +1,4 @@
-#!/system/bin/busybox sh
+#!/system/bin/busybox1.11 sh
 # ../scripts/pppoe-start.  Generated from pppoe-start.in by configure.
 #***********************************************************************
 #
@@ -32,7 +32,7 @@ SETPROP=/system/bin/setprop
 CONNECT=/system/bin/pppoe-connect
 ECHO="/system/bin/log -t pppoe_start"
 #ECHO=echo
-#IFCONFIG=busybox ifconfig
+#IFCONFIG=busybox1.11 ifconfig
 PPPD_PIDFILE="$PIDFILE.pppd"
 
 # Set to "C" locale so we can parse messages from commands
@@ -45,7 +45,7 @@ LOG=/dev/console
 CONFIG=/data/misc/ppp/pppoe.conf
 USER=""
 ETH=""
-ME=`busybox basename $0`
+ME=`busybox1.11 basename $0`
 # Must be root
 #if [ "`/usr/bin/id -u`" != 0 ] ; then
 #    $ECHO "$ME: You must be root to run this script" >& 2
@@ -72,16 +72,16 @@ if [ "$DEBUG" = "1" ] ; then
     $ECHO "* The following section contains information about your system" >> $DEBUG
     date >> $DEBUG
     $ECHO "Output of uname -a" >> $DEBUG
-    busybox uname -a >> $DEBUG
+    busybox1.11 uname -a >> $DEBUG
     $ECHO "---------------------------------------------" >> $DEBUG
     $ECHO "* The following section contains information about your network" >> $DEBUG
     $ECHO "* interfaces.  The one you chose for PPPoE should contain the words:" >> $DEBUG
     $ECHO "* 'UP' and 'RUNNING'.  If it does not, you probably have an Ethernet" >> $DEBUG
     $ECHO "* driver problem." >> $DEBUG
     $ECHO "Output of ifconfig -a" >> $DEBUG
-    busybox ifconfig -a >> $DEBUG
+    busybox1.11 ifconfig -a >> $DEBUG
     $ECHO "---------------------------------------------" >> $DEBUG
-    if [ "`busybox uname -s`" = "Linux" ] ; then
+    if [ "`busybox1.11 uname -s`" = "Linux" ] ; then
         $ECHO "* The following section contains information about kernel modules" >> $DEBUG
 	$ECHO "* If the module for your Ethernet card is 'tulip', you might" >> $DEBUG
 	$ECHO "* want to look for an updated version at http://www.scyld.com" >> $DEBUG
@@ -95,7 +95,7 @@ if [ "$DEBUG" = "1" ] ; then
     $ECHO "* not create a default route using your ISP.  Try getting" >> $DEBUG
     $ECHO "* rid of this route." >> $DEBUG
     $ECHO "Output of netstat -n -r" >> $DEBUG
-    busybox netstat -n -r >> $DEBUG
+    busybox1.11 netstat -n -r >> $DEBUG
     $ECHO "---------------------------------------------" >> $DEBUG
     $ECHO "Contents of /etc/resolv.conf" >> $DEBUG
     $ECHO "* The following section lists DNS setup." >> $DEBUG
@@ -148,20 +148,20 @@ if [ -r "$PIDFILE" ] ; then
 	exit 1
     fi
     # Delete bogus PIDFILE
-    busybox rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PIDFILE.pppoe" "$PIDFILE.start"
+    busybox1.11 rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PIDFILE.pppoe" "$PIDFILE.start"
 fi
 
 echo $$ > $PIDFILE.start
 
 #save default gateway
 DEFAULT_GW=/data/misc/ppp/default_gw
-busybox rm $DEFAULT_GW
-busybox route > $DEFAULT_GW
+busybox1.11 rm $DEFAULT_GW
+busybox1.11 route > $DEFAULT_GW
 cat $DEFAULT_GW|while read line
     do
-      t1=`echo "$line" | busybox awk  '{print $1}'`
+      t1=`echo "$line" | busybox1.11 awk  '{print $1}'`
       if [ $t1 = "default" ] ; then
-          busybox route del default
+          busybox1.11 route del default
       fi
     done
 
@@ -191,7 +191,7 @@ while [ true ] ; do
     # Looks like the interface came up
     if [ $? = 0 ] ; then
 	# Print newline if standard input is a TTY
-	busybox tty -s && $ECHO " Connected!"
+	busybox1.11 tty -s && $ECHO " Connected!"
 	$ECHO "setprop net.pppoe.status connected"     
 	$SETPROP "net.pppoe.status" "connected"
 	chmod 644 /data/misc/ppp/resolv.conf
@@ -201,10 +201,10 @@ while [ true ] ; do
     if test -n "$FORCEPING" ; then
 	printf "%s" "$FORCEPING"
     else
-	busybox tty -s && printf "%s" "$PING"
+	busybox1.11 tty -s && printf "%s" "$PING"
     fi
     sleep $CONNECT_POLL
-    TIME=`busybox expr $TIME + $CONNECT_POLL`
+    TIME=`busybox1.11 expr $TIME + $CONNECT_POLL`
     if [ $TIME -gt $CONNECT_TIMEOUT ] ; then
 	break
     fi
@@ -215,16 +215,16 @@ $SETPROP "net.pppoe.status" "timeout"
 $ECHO "TIMED OUT" >& 2
 
 #restore ethernet default gateway
-busybox route del default
-#busybox route add default gw DEFAULT_GW
+busybox1.11 route del default
+#busybox1.11 route add default gw DEFAULT_GW
 $ECHO "restore gw"
 cat $DEFAULT_GW|while read line
     do
-      t1=`echo "$line" | busybox awk  '{print $1}'`
+      t1=`echo "$line" | busybox1.11 awk  '{print $1}'`
       if [ $t1 = "default" ] ; then
-          t2=`echo "$line" | busybox awk  '{print $2}'`
-          t5=`echo "$line" | busybox awk  '{print $5}'`
-          busybox route add default gw $t2
+          t2=`echo "$line" | busybox1.11 awk  '{print $2}'`
+          t5=`echo "$line" | busybox1.11 awk  '{print $5}'`
+          busybox1.11 route add default gw $t2
       fi
     done
 
@@ -232,7 +232,7 @@ cat $DEFAULT_GW|while read line
 kill $CONNECT_PID > /dev/null 2>&1
 
 # Clean up PIDFILE(s)
-busybox rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PIDFILE.pppoe" "$PIDFILE.start"
+busybox1.11 rm -f "$PIDFILE" "$PPPD_PIDFILE" "$PIDFILE.pppoe" "$PIDFILE.start"
 
 exit 1
 
