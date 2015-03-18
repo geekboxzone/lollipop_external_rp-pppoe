@@ -165,7 +165,7 @@ fi
 
 busybox1.11 egrep -v "^$USER|^\"$USER\"" $PPP_DIR/pap-secrets-bak > $PPP_DIR/pap-secrets
 echo "\"$USER\"	*	\"$PWD\"" >> $PPP_DIR/pap-secrets
-busybox1.11egrep -v "^$U|^\"$U\"" $PPP_DIR/chap-secrets-bak > $PPP_DIR/chap-secrets
+busybox1.11 egrep -v "^$U|^\"$U\"" $PPP_DIR/chap-secrets-bak > $PPP_DIR/chap-secrets
 echo "\"$USER\"	*	\"$PWD\"" >> $PPP_DIR/chap-secrets
 
 $ECHO "setprop net.pppoe.pppoe-start setuped"     
